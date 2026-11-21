@@ -1,0 +1,400 @@
+/* Oiê landing page (v2, decision 0013). Colours come from tokens.css (a copy of design/generated/tokens.css),
+   the logo's brand colours (01 Brand/logo/README.md), and, inside .wa screens only, WhatsApp-like colours.
+   Spacing: the core scale only (4 to 64). */
+
+/* Nunito (SIL OFL 1.1, fonts/OFL.txt), served from this site: the page asks no other site for anything.
+   Subset to Latin and punctuation from the app's own font files (app/src/main/res/font). */
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/nunito-400.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/nunito-600.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/nunito-700.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 800; font-display: swap; src: url("fonts/nunito-800.woff2") format("woff2"); }
+
+:root {
+  /* The logo's own colours, fixed in both themes: the hero is always the coral field. */
+  --brand-coral: #E8573C;
+  --brand-ink: #2A1714;
+  --brand-cream: #FFF6EE;
+  --brand-selected: #FCE1D6; /* the light theme's selected token */
+  --brand-muted: #6E5650;    /* the light theme's muted token */
+
+  /* Decision 0013: the family's WhatsApp, drawn in WhatsApp-like colours. Used only inside .wa. */
+  --wa-bar: #008069;
+  --wa-on-bar: #FFFFFF;
+  --wa-chat: #EFEAE2;
+  --wa-out: #D9FDD3;
+  --wa-in: #FFFFFF;
+  --wa-text: #111B21;
+  --wa-meta: #667781;
+  --wa-read: #53BDEB;
+  --wa-send: #00A884;
+  --wa-face: #DFE5E7;
+  --wa-face-ink: #54656F;
+  --wa-kbd: #D9DDE1;
+  /* Oiê's drawn tablet screen: the light theme's line and surface tokens, fixed (the drawing is always light). */
+  --oie-line: #EFD9CC;
+  --oie-surface: #FFFFFF;
+  --oie-kbd: #E9E3DA;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
+  --r-control: 4px; --r-card: 8px; --r-pill: 16px;
+  --measure: 62ch;
+  --page-max: 1200px;
+  --line: 6px;
+  --ring: 44px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-std: 150ms;
+  --t-emph: 250ms;
+  /* Scene changes use the emphasised duration. The message travelling along the wire is the one longer motion,
+     a story illustration recorded in decision 0013; nothing bounces, and "Remove animations" stops it all. */
+  --t-scene: var(--t-emph);
+  --t-travel: 1200ms;
+
+  color-scheme: light dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--s16); scroll-behavior: smooth; }
+body { margin: 0; background: var(--gds-page); color: var(--gds-ink); font: 400 1.0625rem/1.6 "Nunito", system-ui, sans-serif; }
+[hidden] { display: none !important; }
+::selection { background: var(--gds-selected); color: var(--gds-on-selected); }
+.hero ::selection { background: var(--brand-ink); color: var(--brand-cream); }
+:focus-visible { outline: 3px solid var(--gds-ink); outline-offset: 3px; border-radius: var(--r-control); }
+.hero :focus-visible { outline-color: var(--brand-ink); }
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 2px; }
+a:hover { text-decoration-color: var(--gds-mint); }
+img, svg { display: block; }
+.icon { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: var(--s4); top: -100px; z-index: 10; background: var(--brand-ink); color: var(--brand-cream); padding: var(--s3) var(--s4); border-radius: var(--r-control); font-weight: 700; }
+.skip:focus { top: var(--s4); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s2); min-height: 52px; padding: 0 var(--s6);
+  border-radius: var(--r-control); border: 0; font: 700 1rem/1 "Nunito", sans-serif; text-decoration: none; cursor: pointer;
+  transition: transform var(--t-std) var(--ease), filter var(--t-std) var(--ease);
+}
+.btn:active { transform: scale(0.97); }
+.btn--ink { background: var(--brand-ink); color: var(--brand-cream); }
+.btn--ink:hover { filter: brightness(1.25); }
+.btn--coral { background: var(--gds-mint); color: var(--gds-on-mint); }
+.btn--coral:hover { filter: brightness(1.05); }
+
+/* ---------- The coral hero ---------- */
+.hero { background: var(--brand-coral); color: var(--brand-ink); }
+.wrap { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--s6); }
+.nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s4); padding: var(--s6) 0; }
+.nav__logo img { width: 92px; height: auto; }
+.nav__right { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--s4); }
+.nav__get { display: none; }
+.nav__links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s6); }
+/* On a phone: the logo and the language switch share the top row, and the menu gets its own row below. */
+@media (max-width: 640px) {
+  .nav__right { display: contents; }
+  .nav .lang { margin-left: auto; }
+  .nav__links { order: 3; flex-basis: 100%; }
+}
+.nav__link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; color: var(--brand-ink); }
+.lang { display: inline-flex; border: 1.5px solid var(--brand-ink); border-radius: var(--r-pill); overflow: hidden; }
+.lang button { font: 700 0.875rem/1 "Nunito", sans-serif; color: var(--brand-ink); background: transparent; border: 0; min-height: 44px; min-width: 48px; padding: 0 var(--s3); cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--brand-ink); color: var(--brand-cream); }
+
+.hero__grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--s6) var(--s10); align-items: end; padding: var(--s4) 0 var(--s8); }
+.hero h1 { font-weight: 800; font-size: clamp(2.75rem, 6vw, 5rem); line-height: 0.98; letter-spacing: -0.035em; margin: 0; text-wrap: balance; overflow-wrap: break-word; hyphens: auto; }
+.hero__lede { font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.45; margin: 0 0 var(--s6); max-width: 30em; font-weight: 600; }
+.hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s4) var(--s6); }
+.hero__note { font-size: 0.9375rem; font-weight: 600; margin: 0; }
+
+/* "Monte a sua família": the visitor's own family runs the story below. */
+.family { min-width: 0; background: var(--gds-surface); color: var(--gds-ink); border: 1px solid var(--gds-line); border-radius: var(--r-card); padding: var(--s6); display: grid; gap: var(--s4); }
+.family__title { margin: 0; font-weight: 800; font-size: 1.125rem; line-height: 1.3; }
+.family fieldset { min-width: 0; border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+.family legend { width: 100%; padding: 0; margin-bottom: var(--s2); font-size: 0.875rem; font-weight: 700; color: var(--gds-muted); }
+.family label { position: relative; }
+/* Four people to write to: two by two, so none sits alone on a line. */
+.family fieldset:last-of-type { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.family fieldset:last-of-type legend { grid-column: 1 / -1; }
+.family fieldset:last-of-type label span { width: 100%; }
+.family input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.family label span {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s4); border-radius: var(--r-pill);
+  border: 1.5px solid var(--gds-ink); font-weight: 700; font-size: 0.9375rem; line-height: 1.25; padding-block: var(--s2); overflow-wrap: anywhere; transition: background-color var(--t-std) var(--ease), color var(--t-std) var(--ease), border-color var(--t-std) var(--ease);
+}
+.family input:checked + span { background: var(--gds-ink); color: var(--gds-page); }
+.family input:focus-visible + span { outline: 3px solid var(--gds-mint); outline-offset: 2px; }
+.family__go { font-weight: 800; justify-self: start; min-height: 44px; display: inline-flex; align-items: center; }
+.step__again { margin-top: var(--s4); align-self: flex-start; }
+
+/* ---------- The story: a pinned stage, steps scrolling beside it ---------- */
+.story { position: relative; max-width: var(--page-max); margin: 0 auto; padding: 0 var(--s6); display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: var(--s10); }
+.stage { grid-column: 2; grid-row: 1; position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; flex-direction: column; justify-content: flex-start; padding-top: 3vh; }
+/* Once the hero has scrolled away, the stage centres itself beside the step being read (by transform: no layout). */
+.stage > :is(.cast, .wire) { transition: transform var(--t-scene) var(--ease); }
+.stage.is-pinned > :is(.cast, .wire) { transform: translateY(max(0px, calc(50svh - 300px - 3vh))); }
+.steps { grid-column: 1; grid-row: 1; padding: var(--s8) 0 30vh; }
+.step { min-height: 78vh; scroll-margin-top: calc(11vh - var(--s16)); /* a jump lands with the words mid-screen */ display: flex; flex-direction: column; justify-content: center; transition: color var(--t-scene) var(--ease); }
+/* Only with JavaScript running does the story fade the steps not being read. */
+.js .step { color: var(--gds-muted); }
+.js .step h2 { color: var(--gds-muted); }
+.js .step.is-on, .js .step.is-on h2 { color: var(--gds-ink); }
+.step--intro, .js .step--intro { min-height: 0; padding-bottom: 30vh; opacity: 1; justify-content: flex-start; }
+.step h2 { font-weight: 800; font-size: clamp(1.75rem, 3.4vw, 2.75rem); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 var(--s4); text-wrap: balance; }
+.step p { font-size: 1.1875rem; line-height: 1.55; margin: 0; max-width: 34ch; }
+.stage__tag { position: absolute; top: var(--s6); right: 0; z-index: 3; margin: 0; display: flex; align-items: center; gap: var(--s3); font-size: 0.8125rem; font-weight: 800; color: var(--gds-muted); }
+.stage__next { display: inline-flex; align-items: center; min-height: 44px; color: var(--gds-ink); }
+/* Six short segments, one per step; the ones read so far are ink. Decoration for sight: the words say "2 de 6". */
+.stage__bar { display: inline-flex; gap: var(--s1); width: 96px; }
+.stage__bar i { flex: 1; height: var(--s1); border-radius: var(--s1); background: var(--gds-muted); opacity: 0.35; transition: opacity var(--t-std) var(--ease), background-color var(--t-std) var(--ease); }
+.stage__bar i.is-done { background: var(--gds-ink); opacity: 1; }
+
+.cast { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: var(--s2); position: relative; z-index: 1; }
+.actor { margin: 0; display: grid; justify-items: center; position: relative; }
+/* Only the drawing steps back; the names under it keep their full contrast. */
+.actor > .sil, .actor > .hold { transition: opacity var(--t-scene) var(--ease), filter var(--t-scene) var(--ease); }
+/* People not in focus step back: the person fades and their screen goes grey and lighter. The screens are pictures
+   (aria-hidden, their words are in the step text), so WCAG 1.4.3's exemption for text in a picture applies. */
+.stage:not([data-step="0"]) .actor > .sil { opacity: 0.4; }
+.stage:not([data-step="0"]) .actor > .hold { filter: grayscale(1); --bezel: var(--gds-muted); }
+/* Lighter, but solid: a wash of the page colour over the screen (opacity would show the person through the device). */
+.device::after { content: ""; position: absolute; inset: 0; background: var(--gds-page); opacity: 0; pointer-events: none; transition: opacity var(--t-scene) var(--ease); }
+.stage:not([data-step="0"]) .actor > .hold .device::after { opacity: 0.5; }
+.stage:not([data-step="0"]) .actor > .hold .hand { opacity: 0.4; }
+.stage[data-focus="kid"] .actor--kid > :is(.sil, .hold), .stage[data-focus="parent"] .actor--parent > :is(.sil, .hold), .stage[data-focus="recv"] .actor--recv > :is(.sil, .hold),
+.stage[data-step="2"] .actor--kid > :is(.sil, .hold), .stage[data-step="4"] .actor--kid > :is(.sil, .hold), .stage[data-step="4"] .actor--parent > :is(.sil, .hold) { opacity: 1; filter: none; --bezel: var(--brand-ink); }
+.stage[data-focus="kid"] .actor--kid > .hold .device::after, .stage[data-focus="parent"] .actor--parent > .hold .device::after, .stage[data-focus="recv"] .actor--recv > .hold .device::after,
+.stage[data-step="2"] .actor--kid > .hold .device::after, .stage[data-step="4"] .actor--kid > .hold .device::after, .stage[data-step="4"] .actor--parent > .hold .device::after { opacity: 0; }
+.stage[data-focus="kid"] .actor--kid > .hold .hand, .stage[data-focus="parent"] .actor--parent > .hold .hand, .stage[data-focus="recv"] .actor--recv > .hold .hand,
+.stage[data-step="2"] .actor--kid > .hold .hand, .stage[data-step="4"] .actor--kid > .hold .hand, .stage[data-step="4"] .actor--parent > .hold .hand { opacity: 1; }
+/* Step 6: the parent holds the tablet, so the parent's own figure leaves (one Ana on stage), and the receiver steps back. */
+.stage[data-step="6"] .actor--parent { visibility: hidden; }
+.stage[data-step="6"] .actor--recv > .sil { opacity: 0.25; }
+
+/* The person stands behind; the device is held up at the chest, so the head and shoulders show. */
+.actor { --aw: 228px; --pull: -0.36; --dw: 146px; }
+.actor--kid { --aw: 210px; --pull: -0.25; --dw: 236px; }
+.sil { width: var(--aw); height: calc(var(--aw) * 1.2); fill: var(--gds-ink); color: var(--gds-ink); max-width: 100%; }
+/* The details that give each person their character: clothes, glasses, earrings, in the page's colour. */
+.sil .d, .others .d { fill: none; stroke: var(--gds-page); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.sil .dot, .others .dot { fill: var(--gds-page); }
+.sil .e, .others .e { fill: none; stroke: var(--gds-ink); stroke-width: 4; }
+.sil .num, .others .num { fill: var(--gds-page); font: 800 30px "Nunito", sans-serif; }
+.sil { overflow: visible; }
+.sil .hd { transform-box: view-box; transform-origin: 100px 150px; transition: transform var(--t-scene) var(--ease); }
+/* Typing: the head tips down towards the device, the thumbs tap. */
+.actor.is-typing .hd { transform: rotate(5deg) translateY(4px); }
+.actor.is-typing .hand { animation: tap calc(var(--t-std) * 2) var(--ease) infinite; }
+.actor.is-typing .hand--r { animation-delay: var(--t-std); }
+@keyframes tap { 50% { transform: translateY(-7px) scale(0.9); } }
+/* Reading: one nod. The answer lands: the tablet gives one press (97%, the system's press), no bounce. */
+.actor.is-nod .hd { animation: nod calc(var(--t-emph) * 2) var(--ease) var(--t-emph) 1; }
+@keyframes nod { 50% { transform: rotate(-6deg) translateY(2px); } }
+.actor.is-hop .hold { animation: press calc(var(--t-emph) * 2) var(--ease); }
+@keyframes press { 50% { transform: scale(0.97); } }
+.hold { position: relative; z-index: 2; width: var(--dw); max-width: 100%; margin-top: calc(var(--aw) * var(--pull)); }
+.hand { transition: opacity var(--t-scene) var(--ease); position: absolute; top: 56%; width: 30px; height: 30px; border-radius: 50%; background: var(--gds-ink); border: 4px solid var(--gds-page); }
+.hand--l { left: -15px; }
+.hand--r { right: -15px; }
+.actor figcaption { display: grid; justify-items: center; text-align: center; margin-top: var(--s3); font-size: 0.875rem; line-height: 1.3; color: var(--gds-muted); font-weight: 600; }
+.actor figcaption b { color: var(--gds-ink); font-size: 1rem; font-weight: 800; }
+.device { position: relative; border: 7px solid var(--bezel, var(--brand-ink)); background: var(--bezel, var(--brand-ink)); transition: border-color var(--t-scene) var(--ease), background-color var(--t-scene) var(--ease); overflow: hidden; }
+.phone { width: 100%; aspect-ratio: 9 / 16; border-radius: 24px; }
+/* In dark, the ink bezel would vanish into the ground: a muted edge keeps the device's shape. */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .device { box-shadow: 0 0 0 2px var(--gds-muted); } }
+:root[data-theme="dark"] .device { box-shadow: 0 0 0 2px var(--gds-muted); }
+.tablet { width: 100%; aspect-ratio: 4 / 3; border-radius: 16px; }
+
+/* The wire between the three: the family line from v1, carrying the message. */
+.wire { flex: none; position: relative; height: var(--line); margin: var(--s4) 6% 0; background: var(--gds-ink); border-radius: var(--line); }
+/* The dot rides a run as wide as the wire, so it moves by transform (no layout) along it. */
+.wire__run { position: absolute; inset: 0; transform: translateX(0); transition: transform var(--t-travel) var(--ease); }
+/* The run slides past the wire's end when the dot reaches the receiver: the wire clips it (with room for the dot),
+   so the page never scrolls sideways and nothing else on the stage is cut. */
+.wire { overflow: clip; overflow-clip-margin: var(--s3); }
+.wire__dot { position: absolute; top: 50%; left: 0; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--gds-mint); border: 4px solid var(--gds-page); transition: opacity var(--t-emph) var(--ease); opacity: 0; }
+
+/* ---------- Oiê's own screen on the tablet (coral frame, message rows) ---------- */
+.oie { position: absolute; inset: 0; background: var(--brand-cream); border: 4px solid var(--brand-coral); display: flex; flex-direction: column; font-size: 11px; line-height: 1.35; color: var(--brand-ink); }
+.oie__bar { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-bottom: 1px solid var(--oie-line); font-weight: 800; font-size: 12px; }
+.oie__face { width: 22px; height: 22px; border-radius: 50%; background: var(--brand-selected); display: grid; place-items: center; font-size: 9px; font-weight: 800; }
+.oie__home { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: center; gap: 6px; padding: 8px; }
+.oie__tile { min-width: 0; display: grid; justify-items: center; gap: 3px; font-style: normal; }
+.oie__tile b { width: 38px; height: 38px; border-radius: 50%; background: var(--brand-selected); display: grid; place-items: center; font-size: 13px; }
+.oie__tile i { max-width: 100%; font-style: normal; font-weight: 700; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.oie__chat { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 5px; padding: 8px; }
+.oie__msg { margin: 0; max-width: 78%; padding: 5px 8px; border-radius: 6px; transition: opacity var(--t-scene) var(--ease), transform var(--t-scene) var(--ease); }
+.oie__msg small { display: block; font-size: 8.5px; color: var(--brand-muted); font-weight: 700; }
+.oie__msg--out { align-self: flex-end; background: var(--brand-selected); }
+/* Once the answer is in, the tablet drops "Mandada" so both messages fit. */
+.stage[data-replied] .oie__msg small { display: none; }
+.oie__msg--in { align-self: flex-start; background: var(--oie-surface); border: 1px solid var(--oie-line); }
+.oie__compose { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-top: 1px solid var(--oie-line); }
+.oie__field { flex: 1; min-height: 22px; border: 1px solid var(--oie-line); border-radius: 4px; background: var(--oie-surface); padding: 3px 6px; white-space: nowrap; overflow: hidden; }
+.oie__mic { width: 24px; height: 24px; border-radius: 50%; background: var(--brand-coral); display: grid; place-items: center; }
+.oie__mic .icon { width: 13px; height: 13px; stroke-width: 2.2; }
+.oie__parent { position: absolute; inset: 0; background: var(--brand-cream); padding: 10px 12px; display: none; }
+.oie__ptitle { margin: 0 0 6px; font-weight: 800; font-size: 13px; }
+.oie__prow { margin: 0; display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--oie-line); font-weight: 700; }
+.sw { width: 26px; height: 15px; border-radius: 8px; background: var(--brand-ink); position: relative; }
+.sw::after { content: ""; position: absolute; right: 2px; top: 2px; width: 11px; height: 11px; border-radius: 50%; background: var(--brand-cream); }
+
+/* Older messages scroll up under the header, as in a real chat: a short fade says "there's more above". */
+.oie__chat, .wa__chat { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px); mask-image: linear-gradient(to bottom, transparent 0, #000 14px); }
+
+/* What the tablet shows, step by step. */
+.stage .oie__chat, .stage .oie__compose { display: none; }
+.stage[data-step="1"] .oie__home, .stage[data-step="2"] .oie__home, .stage[data-step="3"] .oie__home, .stage[data-step="4"] .oie__home { display: none; }
+.stage[data-step="1"] .oie__chat, .stage[data-step="2"] .oie__chat, .stage[data-step="3"] .oie__chat, .stage[data-step="4"] .oie__chat,
+.stage[data-step="1"] .oie__compose, .stage[data-step="2"] .oie__compose, .stage[data-step="3"] .oie__compose, .stage[data-step="4"] .oie__compose { display: flex; }
+.stage[data-step="0"] .oie__bar, .stage[data-step="5"] .oie__bar, .stage[data-step="6"] .oie__bar { visibility: hidden; }
+.stage[data-step="6"] .oie__parent { display: block; }
+
+/* ---------- The family's WhatsApp (decision 0013: colours only, no logo) ---------- */
+.wa { position: absolute; inset: 0; background: var(--wa-chat); display: flex; flex-direction: column; font-size: 11px; line-height: 1.35; color: var(--wa-text); }
+.wa__bar { background: var(--wa-bar); color: var(--wa-on-bar); display: flex; align-items: center; gap: 6px; padding: 18px 8px 7px; }
+.wa__face { width: 24px; height: 24px; border-radius: 50%; background: var(--wa-face); color: var(--wa-face-ink); display: grid; place-items: center; font-size: 9px; font-weight: 800; flex: none; }
+.wa__who { display: grid; line-height: 1.2; }
+.wa__who b { font-size: 12px; }
+.wa__who small { font-size: 9px; opacity: 0.9; }
+.wa__chat { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; padding: 8px 7px; }
+.wa__msg { margin: 0; max-width: 84%; padding: 5px 7px 4px; border-radius: 7px; box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13); transition: opacity var(--t-scene) var(--ease), transform var(--t-scene) var(--ease); }
+.wa__msg small { display: flex; justify-content: flex-end; align-items: center; gap: 2px; font-size: 8.5px; color: var(--wa-meta); margin-top: 1px; }
+.wa__msg--out { align-self: flex-end; background: var(--wa-out); border-top-right-radius: 0; }
+.wa__msg--in { align-self: flex-start; background: var(--wa-in); border-top-left-radius: 0; }
+.ticks { width: 13px; height: 13px; fill: none; stroke: var(--wa-meta); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ticks--read, .stage[data-step="3"] #ticks, .stage[data-step="4"] #ticks { stroke: var(--wa-read); }
+.wa__compose { display: flex; align-items: center; gap: 5px; padding: 6px; }
+.wa__field { flex: 1; min-height: 24px; background: var(--wa-in); border-radius: 12px; padding: 4px 9px; color: var(--wa-meta); white-space: nowrap; overflow: hidden; }
+.wa__field.is-typing { color: var(--wa-text); }
+.wa__send { width: 24px; height: 24px; border-radius: 50%; background: var(--wa-send); flex: none; }
+
+/* The keyboard rises from the bottom of the screen while someone types; a key lights up for every letter. */
+.kbd { flex: none; max-height: 0; overflow: hidden; display: grid; gap: 3px; padding: 0 5px; background: var(--oie-kbd); transition: max-height var(--t-scene) var(--ease), padding var(--t-scene) var(--ease); }
+.wa .kbd { background: var(--wa-kbd); }
+.device.is-typing .kbd { max-height: 40%; padding: 5px; }
+.kbd__row { display: flex; justify-content: center; gap: 3px; }
+.kbd i { flex: 1; max-width: 13px; height: 13px; border-radius: 3px; background: var(--oie-surface); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18); transition: background-color calc(var(--t-std) / 2) linear, transform calc(var(--t-std) / 2) linear; }
+.kbd i.kbd__space { max-width: none; flex: 0 0 55%; }
+.kbd i.is-hit { background: var(--brand-coral); transform: translateY(1px); }
+.wa .kbd i.is-hit { background: var(--wa-send); }
+
+/* The three dots WhatsApp shows while the other person types. */
+.wa__dots { display: none; gap: 3px; padding: 7px 9px; }
+.wa__dots.is-on { display: inline-flex; }
+.wa__dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--wa-meta); animation: dot calc(var(--t-emph) * 4) var(--ease) infinite; }
+.wa__dots i:nth-child(2) { animation-delay: var(--t-std); }
+.wa__dots i:nth-child(3) { animation-delay: calc(var(--t-std) * 2); }
+@keyframes dot { 30% { transform: translateY(-3px); opacity: 0.5; } }
+
+/* Messages appear when their step comes (data-show = the step they arrive in). */
+[data-show] { display: none; }
+@keyframes appear { from { opacity: 0; transform: translateY(6px); } }
+.stage[data-step="2"] [data-show="2"],
+.stage[data-step="3"] [data-show="2"], .stage[data-step="3"] [data-show="3"],
+.stage[data-step="4"] [data-show="2"], .stage[data-step="4"] [data-show="3"],
+.stage[data-step="4"][data-replied] [data-show="4"],
+.stage[data-step="5"] .actor--recv [data-show] { display: block; animation: appear var(--t-scene) var(--ease); }
+
+/* Typing caret. */
+.caret { display: inline-block; width: 1.5px; height: 1.1em; margin-left: 1px; vertical-align: -0.2em; background: currentColor; animation: blink calc(var(--t-emph) * 4) steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Step 5: the other people a kid can write to. */
+.others { list-style: none; margin: var(--s8) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 9rem)); gap: var(--s4) var(--s6); }
+.others li { min-width: 0; display: grid; justify-items: center; gap: var(--s1); font-weight: 700; font-size: 0.9375rem; text-align: center; overflow-wrap: anywhere; }
+.others .sil { width: 92px; height: 110px; max-width: 100%; margin: 0; }
+.others .d { stroke-width: 6; }
+
+/* ---------- After the story: stations on a coral spine (as v1) ---------- */
+.line { position: relative; max-width: var(--page-max); margin: 0 auto; padding: 0 var(--s6) var(--s16); }
+.line::before { content: ""; position: absolute; top: 0; bottom: var(--s16); left: calc(var(--s6) + (var(--ring) - var(--line)) / 2); width: var(--line); background: var(--gds-mint); border-radius: var(--line); }
+.stop { position: relative; display: grid; grid-template-columns: var(--ring) minmax(0, 1fr); column-gap: var(--s8); padding-top: var(--s16); }
+.stop__ring { width: var(--ring); height: var(--ring); border-radius: 50%; margin-top: var(--s1); background: var(--gds-page); border: var(--line) solid var(--gds-mint); position: relative; z-index: 1; }
+.stop__body { min-width: 0; }
+.stop h2 { font-weight: 800; font-size: clamp(1.75rem, 3.6vw, 2.75rem); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 var(--s4); text-wrap: balance; }
+.honest { background: var(--gds-coral-soft); border-radius: var(--r-card); padding: var(--s8); }
+.honest h3 { margin: 0 0 var(--s3); font-size: 1.25rem; font-weight: 800; }
+.honest blockquote { margin: 0 0 var(--s6); font-size: 1.125rem; line-height: 1.55; font-weight: 600; max-width: var(--measure); }
+.honest__why { margin: 0; max-width: var(--measure); }
+.facts { list-style: none; margin: var(--s4) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s6) var(--s10); }
+.facts li { display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: var(--s3); }
+.facts__dot { width: 14px; height: 14px; margin: 6px 4px 0; border-radius: 50%; border: 3px solid var(--gds-mint); }
+.faq { max-width: 760px; border-top: 1px solid var(--gds-line); }
+.faq details { border-bottom: 1px solid var(--gds-line); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: var(--s4); min-height: 56px; padding: var(--s3) 0; font-weight: 800; font-size: 1.125rem; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; width: 12px; height: 12px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translate(-2px, -2px); transition: transform var(--t-std) var(--ease); flex: none; }
+.faq details[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.faq details p { margin: 0 0 var(--s6); max-width: var(--measure); }
+.get { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: var(--s10); align-items: start; }
+.steps-get { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: var(--s4); }
+.steps-get li { counter-increment: s; display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: var(--s3); }
+.steps-get li::before { content: counter(s); width: 32px; height: 32px; border-radius: 50%; background: var(--gds-selected); display: grid; place-items: center; font-weight: 800; }
+/* The notice: plain sentences under a plain heading, as quiet as the rest of the page. */
+.notice h2 { font-size: 1.375rem; }
+.notice p { margin: 0 0 var(--s3); max-width: var(--measure); color: var(--gds-muted); }
+.notice p b { color: var(--gds-ink); }
+.get__small { font-size: 0.9375rem; color: var(--gds-muted); margin-top: var(--s4); }
+footer { border-top: 1px solid var(--gds-line); }
+.foot { max-width: var(--page-max); margin: 0 auto; padding: var(--s10) var(--s6); display: flex; flex-wrap: wrap; gap: var(--s6) var(--s10); justify-content: space-between; align-items: flex-start; font-size: 0.9375rem; color: var(--gds-muted); }
+.foot img { width: 72px; height: auto; margin-bottom: var(--s3); }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.foot ul a { display: inline-flex; align-items: center; min-height: 44px; }
+.foot p { margin: 0; max-width: 40ch; }
+.foot p.foot__made { margin-top: var(--s2); color: var(--gds-ink); }
+
+@media (min-width: 900px) { .nav__get { display: inline-flex; } }
+@media (min-width: 900px) and (max-width: 1199px) {
+  .actor { --aw: 196px; --dw: 124px; }
+  .wa, .oie { font-size: 9.5px; }
+  .wa__bar { padding-top: 12px; }
+  .actor--kid { --aw: 184px; --dw: 196px; }
+}
+@media (max-width: 1099px) {
+  .hero__grid { grid-template-columns: minmax(0, 1fr); align-items: start; }
+}
+/* Phones and narrow tablets: the stage pins on top and shows one person at a time, large; the others wait small. */
+@media (max-width: 899px) {
+  .story { grid-template-columns: minmax(0, 1fr); padding: 0; }
+  .stage { grid-column: 1; height: 54svh; top: 0; z-index: 2; background: var(--gds-page); padding: var(--s4) var(--s4) var(--s3); border-bottom: 1px solid var(--gds-line); justify-content: flex-end; }
+  .steps { grid-column: 1; grid-row: 2; padding: var(--s8) var(--s4) 40vh; }
+  /* While the visitor builds their family, the stage scrolls away with the page, so the whole form is in reach. */
+  .stage[data-step="0"] { position: relative; }
+  /* The stage pins as soon as the form's end slides under it, and step 1 follows right after. */
+  .step--intro, .js .step--intro { padding-bottom: var(--s6); }
+  /* "Ver a história" lands with step 1's heading just under the pinned stage. */
+  .step { scroll-margin-top: calc(54svh - var(--s16) - var(--s4)); } /* lands just under the stage; the page's 64px scroll-padding adds to it */
+  /* The stage is already at the top on a phone: no centring shift (it would push the drawing over the words). */
+  .stage.is-pinned > :is(.cast, .wire) { transform: none; }
+  /* A step is as tall as the band under the stage: the next words arrive as the last ones leave. */
+  /* Shorter than the band under the stage, so the next step's heading always shows below the one being read. */
+  .step { min-height: 34svh; justify-content: flex-start; padding-top: var(--s8); } /* the heading lands 16px clear of the stage */
+  .step p { max-width: none; }
+  .cast { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .actor { grid-area: 1 / 1; }
+  .stage .actor { opacity: 0 !important; pointer-events: none; }
+  .stage[data-focus="kid"] .actor--kid, .stage[data-focus="parent"] .actor--parent, .stage[data-focus="recv"] .actor--recv,
+  .stage[data-step="0"] .actor--kid { opacity: 1 !important; filter: none; }
+  .actor { --aw: 184px; --dw: 112px; }
+  .wa { font-size: 10px; }
+  .wa__bar { padding-top: 12px; }
+  .actor--kid { --aw: 168px; --dw: 220px; }
+  .step { opacity: 1; }
+  .wire { margin: var(--s3) var(--s8) 0; }
+  /* The count, the bar and "Próximo" sit at the stage's bottom edge, right above the words being read and in
+     reach of the thumb, with the bar spanning the width: the story reads as a sequence to move through. */
+  .stage__tag { position: static; order: 3; width: 100%; margin-top: var(--s3); gap: var(--s3); }
+  .stage__bar { flex: 1; width: auto; }
+  .get { grid-template-columns: minmax(0, 1fr); gap: var(--s8); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  :root { --ring: 32px; --line: 5px; }
+  .wrap, .line { padding-left: var(--s4); padding-right: var(--s4); }
+  .line::before { left: calc(var(--s4) + (var(--ring) - var(--line)) / 2); }
+  .stop { column-gap: var(--s4); padding-top: var(--s12); }
+  .honest { padding: var(--s6); }
+  .family { padding: var(--s4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 1ms !important; animation: none !important; }
+}
